@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfect Body Calorie Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .result-card {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <div class="gradient-bg text-white py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-4">Perfect Body Calorie Calculator</h1>
+            <p class="text-xl opacity-90">Discover your ideal daily calorie intake for achieving your dream physique</p>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 sm:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Input Form -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Information</h2>
+                        
+                        <div class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                                <div class="flex space-x-4">
+                                    <button id="maleBtn" class="gender-btn px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                        <i class="fas fa-mars mr-2"></i>Male
+                                    </button>
+                                    <button id="femaleBtn" class="gender-btn px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-pink-50 hover:border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition">
+                                        <i class="fas fa-venus mr-2"></i>Female
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age (years)</label>
+                                <input type="number" id="age" min="15" max="100" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. 25">
+                            </div>
+
+                            <div>
+                                <label for="height" class="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                                <input type="number" id="height" min="100" max="250" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. 175">
+                            </div>
+
+                            <div>
+                                <label for="weight" class="block text-sm font-medium text-gray-700 mb-1">Current Weight (kg)</label>
+                                <input type="number" id="weight" min="30" max="200" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="e.g. 70">
+                            </div>
+
+                            <div>
+                                <label for="activity" class="block text-sm font-medium text-gray-700 mb-1">Activity Level</label>
+                                <select id="activity" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="1.2">Sedentary (little or no exercise)</option>
+                                    <option value="1.375">Lightly active (light exercise 1-3 days/week)</option>
+                                    <option value="1.55" selected>Moderately active (moderate exercise 3-5 days/week)</option>
+                                    <option value="1.725">Very active (hard exercise 6-7 days/week)</option>
+                                    <option value="1.9">Extra active (very hard exercise & physical job)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Goal</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button id="loseBtn" class="goal-btn px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-red-50 hover:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition">
+                                        <i class="fas fa-weight-loss mr-1"></i>Lose
+                                    </button>
+                                    <button id="maintainBtn" class="goal-btn px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-green-50 hover:border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition">
+                                        <i class="fas fa-balance-scale mr-1"></i>Maintain
+                                    </button>
+                                    <button id="gainBtn" class="goal-btn px-3 py-2 text-sm rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                        <i class="fas fa-weight mr-1"></i>Gain
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button id="calculateBtn" class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform hover:-translate-y-1">
+                                <i class="fas fa-calculator mr-2"></i>Calculate Calories
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">Your Results</h2>
+                        
+                        <div id="results" class="hidden space-y-5">
+                            <div class="result-card bg-white border border-gray-200 rounded-xl p-6">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-blue-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-fire text-blue-600"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Daily Calorie Needs</h3>
+                                </div>
+                                <div class="text-center py-4">
+                                    <p class="text-sm text-gray-500 mb-1">To reach your goal, you should consume</p>
+                                    <p id="caloriesResult" class="text-4xl font-bold text-blue-600">0</p>
+                                    <p class="text-sm text-gray-500">calories per day</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="result-card bg-white border border-gray-200 rounded-xl p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="bg-green-100 p-2 rounded-full mr-2">
+                                            <i class="fas fa-bread-slice text-green-600 text-sm"></i>
+                                        </div>
+                                        <h3 class="text-md font-semibold text-gray-800">Carbs</h3>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="carbsResult" class="text-2xl font-bold text-green-600">0g</p>
+                                        <p class="text-xs text-gray-500">45-65% of calories</p>
+                                    </div>
+                                </div>
+
+                                <div class="result-card bg-white border border-gray-200 rounded-xl p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="bg-yellow-100 p-2 rounded-full mr-2">
+                                            <i class="fas fa-egg text-yellow-600 text-sm"></i>
+                                        </div>
+                                        <h3 class="text-md font-semibold text-gray-800">Protein</h3>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="proteinResult" class="text-2xl font-bold text-yellow-600">0g</p>
+                                        <p class="text-xs text-gray-500">10-35% of calories</p>
+                                    </div>
+                                </div>
+
+                                <div class="result-card bg-white border border-gray-200 rounded-xl p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="bg-red-100 p-2 rounded-full mr-2">
+                                            <i class="fas fa-bacon text-red-600 text-sm"></i>
+                                        </div>
+                                        <h3 class="text-md font-semibold text-gray-800">Fats</h3>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="fatsResult" class="text-2xl font-bold text-red-600">0g</p>
+                                        <p class="text-xs text-gray-500">20-35% of calories</p>
+                                    </div>
+                                </div>
+
+                                <div class="result-card bg-white border border-gray-200 rounded-xl p-4">
+                                    <div class="flex items-center mb-2">
+                                        <div class="bg-purple-100 p-2 rounded-full mr-2">
+                                            <i class="fas fa-tint text-purple-600 text-sm"></i>
+                                        </div>
+                                        <h3 class="text-md font-semibold text-gray-800">Water</h3>
+                                    </div>
+                                    <div class="text-center">
+                                        <p id="waterResult" class="text-2xl font-bold text-purple-600">0L</p>
+                                        <p class="text-xs text-gray-500">Daily recommendation</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="result-card bg-white border border-gray-200 rounded-xl p-6">
+                                <div class="flex items-center mb-3">
+                                    <div class="bg-indigo-100 p-2 rounded-full mr-3">
+                                        <i class="fas fa-chart-line text-indigo-600"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold text-gray-800">Body Mass Index (BMI)</h3>
+                                </div>
+                                <div class="text-center py-4">
+                                    <p id="bmiResult" class="text-4xl font-bold text-indigo-600">0</p>
+                                    <p id="bmiCategory" class="text-sm text-gray-500">Category will appear here</p>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+                                        <div id="bmiBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                                    </div>
+                                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                        <span>Underweight</span>
+                                        <span>Normal</span>
+                                        <span>Overweight</span>
+                                        <span>Obese</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="loading" class="hidden flex flex-col items-center justify-center py-12">
+                            <div class="animate-pulse mb-4">
+                                <i class="fas fa-calculator text-5xl text-blue-500"></i>
+                            </div>
+                            <p class="text-gray-600">Calculating your perfect calorie intake...</p>
+                        </div>
+
+                        <div id="initialState" class="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-xl">
+                            <div class="bg-blue-100 p-4 rounded-full mb-4">
+                                <i class="fas fa-user-edit text-3xl text-blue-600"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-800 mb-2">Fill in your details</h3>
+                            <p class="text-gray-500 text-center max-w-xs">Enter your information and click "Calculate Calories" to see your personalized nutrition plan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="p-6 sm:p-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Nutrition Tips for Your Goal</h2>
+                <div id="tipsContent" class="text-gray-600">
+                    <p class="mb-4">Complete the form to see personalized nutrition tips based on your goals and body metrics.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>© 2023 Perfect Body Calorie Calculator. All rights reserved.</p>
+            <p class="mt-2 text-sm text-gray-400">This calculator provides estimates only and is not a substitute for professional medical advice.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Default selections
+            let gender = 'male';
+            let goal = 'maintain';
+            
+            // Gender selection
+            document.getElementById('maleBtn').addEventListener('click', function() {
+                gender = 'male';
+                updateButtonStyles('gender', this);
+            });
+            
+            document.getElementById('femaleBtn').addEventListener('click', function() {
+                gender = 'female';
+                updateButtonStyles('gender', this);
+            });
+            
+            // Goal selection
+            document.getElementById('loseBtn').addEventListener('click', function() {
+                goal = 'lose';
+                updateButtonStyles('goal', this);
+            });
+            
+            document.getElementById('maintainBtn').addEventListener('click', function() {
+                goal = 'maintain';
+                updateButtonStyles('goal', this);
+            });
+            
+            document.getElementById('gainBtn').addEventListener('click', function() {
+                goal = 'gain';
+                updateButtonStyles('goal', this);
+            });
+            
+            // Calculate button
+            document.getElementById('calculateBtn').addEventListener('click', calculateCalories);
+            
+            // Set initial active buttons
+            updateButtonStyles('gender', document.getElementById('maleBtn'));
+            updateButtonStyles('goal', document.getElementById('maintainBtn'));
+            
+            function updateButtonStyles(type, activeButton) {
+                const buttons = type === 'gender' 
+                    ? document.querySelectorAll('.gender-btn')
+                    : document.querySelectorAll('.goal-btn');
+                
+                buttons.forEach(button => {
+                    button.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+                    button.classList.remove('bg-pink-500', 'text-white', 'border-transparent');
+                    button.classList.remove('bg-red-500', 'text-white', 'border-transparent');
+                    button.classList.remove('bg-green-500', 'text-white', 'border-transparent');
+                    button.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+                });
+                
+                if (type === 'gender') {
+                    if (gender === 'male') {
+                        activeButton.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+                    } else {
+                        activeButton.classList.add('bg-pink-500', 'text-white', 'border-transparent');
+                    }
+                } else {
+                    if (goal === 'lose') {
+                        activeButton.classList.add('bg-red-500', 'text-white', 'border-transparent');
+                    } else if (goal === 'maintain') {
+                        activeButton.classList.add('bg-green-500', 'text-white', 'border-transparent');
+                    } else {
+                        activeButton.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+                    }
+                }
+            }
+            
+            function calculateCalories() {
+                // Get input values
+                const age = parseFloat(document.getElementById('age').value);
+                const height = parseFloat(document.getElementById('height').value);
+                const weight = parseFloat(document.getElementById('weight').value);
+                const activity = parseFloat(document.getElementById('activity').value);
+                
+                // Validate inputs
+                if (!age || !height || !weight) {
+                    alert('Please fill in all fields with valid numbers');
+                    return;
+                }
+                
+                // Show loading state
+                document.getElementById('initialState').classList.add('hidden');
+                document.getElementById('results').classList.add('hidden');
+                document.getElementById('loading').classList.remove('hidden');
+                
+                // Simulate calculation delay
+                setTimeout(() => {
+                    // Calculate BMR (Basal Metabolic Rate)
+                    let bmr;
+                    if (gender === 'male') {
+                        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+                    } else {
+                        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+                    }
+                    
+                    // Calculate TDEE (Total Daily Energy Expenditure)
+                    let tdee = bmr * activity;
+                    
+                    // Adjust for goal
+                    let calories;
+                    if (goal === 'lose') {
+                        calories = tdee - 500; // 500 calorie deficit for weight loss
+                    } else if (goal === 'gain') {
+                        calories = tdee + 500; // 500 calorie surplus for weight gain
+                    } else {
+                        calories = tdee; // Maintenance
+                    }
+                    
+                    // Calculate BMI
+                    const bmi = weight / Math.pow(height / 100, 2);
+                    let bmiCategory;
+                    let bmiPercentage;
+                    
+                    if (bmi < 18.5) {
+                        bmiCategory = 'Underweight';
+                        bmiPercentage = (bmi / 18.5) * 25;
+                    } else if (bmi < 25) {
+                        bmiCategory = 'Normal weight';
+                        bmiPercentage = 25 + ((bmi - 18.5) / (25 - 18.5)) * 25;
+                    } else if (bmi < 30) {
+                        bmiCategory = 'Overweight';
+                        bmiPercentage = 50 + ((bmi - 25) / (30 - 25)) * 25;
+                    } else {
+                        bmiCategory = 'Obese';
+                        bmiPercentage = 75 + (Math.min((bmi - 30) / 10, 1) * 25);
+                    }
+                    
+                    // Calculate macronutrients (simplified)
+                    const proteinGrams = Math.round((weight * 1.6)); // 1.6g per kg of body weight
+                    const proteinCalories = proteinGrams * 4;
+                    
+                    const fatCalories = calories * 0.25; // 25% of calories from fat
+                    const fatGrams = Math.round(fatCalories / 9);
+                    
+                    const carbCalories = calories - proteinCalories - fatCalories;
+                    const carbGrams = Math.round(carbCalories / 4);
+                    
+                    // Water recommendation (simplified)
+                    const waterLitres = Math.round((weight * 0.033) * 10) / 10;
+                    
+                    // Update results
+                    document.getElementById('caloriesResult').textContent = Math.round(calories);
+                    document.getElementById('carbsResult').textContent = carbGrams + 'g';
+                    document.getElementById('proteinResult').textContent = proteinGrams + 'g';
+                    document.getElementById('fatsResult').textContent = fatGrams + 'g';
+                    document.getElementById('waterResult').textContent = waterLitres + 'L';
+                    document.getElementById('bmiResult').textContent = bmi.toFixed(1);
+                    document.getElementById('bmiCategory').textContent = bmiCategory;
+                    document.getElementById('bmiBar').style.width = bmiPercentage + '%';
+                    
+                    // Update nutrition tips
+                    updateNutritionTips(goal, bmiCategory);
+                    
+                    // Show results
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('results').classList.remove('hidden');
+                }, 1500);
+            }
+            
+            function updateNutritionTips(goal, bmiCategory) {
+                const tipsContent = document.getElementById('tipsContent');
+                let tipsHTML = '';
+                
+                // General tips based on BMI
+                if (bmiCategory === 'Underweight') {
+                    tipsHTML += `
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-circle text-yellow-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-yellow-700">
+                                        Your BMI suggests you're underweight. Focus on nutrient-dense foods to gain weight healthily.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (bmiCategory === 'Normal weight') {
+                    tipsHTML += `
+                        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check-circle text-green-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-green-700">
+                                        Your BMI is in the healthy range. Keep up the good work!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (bmiCategory === 'Overweight' || bmiCategory === 'Obese') {
+                    tipsHTML += `
+                        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-red-400"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-red-700">
+                                        Your BMI suggests you may benefit from weight loss. Focus on sustainable changes.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Goal-specific tips
+                if (goal === 'lose') {
+                    tipsHTML += `
+                        <h3 class="font-medium text-gray-800 mb-2">Weight Loss Tips</h3>
+                        <ul class="list-disc pl-5 space-y-1 mb-4">
+                            <li>Prioritize protein to maintain muscle mass while losing fat</li>
+                            <li>Include plenty of fiber-rich vegetables to feel full</li>
+                            <li>Stay hydrated - sometimes thirst is mistaken for hunger</li>
+                            <li>Combine diet with resistance training for best results</li>
+                            <li>Aim for 1-2 pounds of weight loss per week for sustainability</li>
+                        </ul>
+                    `;
+                } else if (goal === 'gain') {
+                    tipsHTML += `
+                        <h3 class="font-medium text-gray-800 mb-2">Weight Gain Tips</h3>
+                        <ul class="list-disc pl-5 space-y-1 mb-4">
+                            <li>Focus on calorie-dense healthy foods like nuts, avocados, and whole grains</li>
+                            <li>Eat frequent meals (5-6 per day) to increase calorie intake</li>
+                            <li>Combine with strength training to ensure weight gain is muscle</li>
+                            <li>Consider protein shakes if struggling to meet protein needs</li>
+                            <li>Aim for 0.5-1 pound of weight gain per week</li>
+                        </ul>
+                    `;
+                } else {
+                    tipsHTML += `
+                        <h3 class="font-medium text-gray-800 mb-2">Maintenance Tips</h3>
+                        <ul class="list-disc pl-5 space-y-1 mb-4">
+                            <li>Focus on a balanced diet with variety</li>
+                            <li>Continue regular exercise to maintain metabolism</li>
+                            <li>Monitor your weight weekly to catch any trends early</li>
+                            <li>Adjust portion sizes as needed based on activity levels</li>
+                            <li>Prioritize sleep and stress management for metabolic health</li>
+                        </ul>
+                    `;
+                }
+                
+                // General nutrition tips
+                tipsHTML += `
+                    <h3 class="font-medium text-gray-800 mb-2">General Nutrition Advice</h3>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Choose whole, minimally processed foods whenever possible</li>
+                        <li>Include a variety of colorful fruits and vegetables</li>
+                        <li>Stay consistent with your eating patterns</li>
+                        <li>Listen to your body's hunger and fullness cues</li>
+                        <li>Allow for flexibility - perfection isn't necessary for results</li>
+                    </ul>
+                `;
+                
+                tipsContent.innerHTML = tipsHTML;
+            }
+        });
+    </script>
+</body>
+</html>
